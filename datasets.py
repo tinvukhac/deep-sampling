@@ -16,6 +16,8 @@ def load_histograms(df, num_rows, num_columns):
 
     for filename in df['dataset_name']:
         hist = np.genfromtxt('{}/{}'.format(histogram_dir, filename), delimiter=',')
+        hist = hist / hist.max()
+        hist = hist.reshape((hist.shape[0], hist.shape[1], 1))
         histograms.append(hist)
 
-    return histograms
+    return np.array(histograms)

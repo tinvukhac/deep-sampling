@@ -7,9 +7,6 @@ from keras.models import Model
 from keras.optimizers import Adam
 from keras.layers import concatenate
 import numpy as np
-import argparse
-import locale
-import os
 
 
 def main():
@@ -28,6 +25,11 @@ def main():
     train_y = train_query_attributes['mean_accuracy']
     test_y = test_query_attributes['mean_accuracy']
 
+    # train_query_x = pd.DataFrame.to_numpy(train_query_attributes[['query_ratio', 'mean_accuracy']])
+    # test_query_x = pd.DataFrame.to_numpy(test_query_attributes[['query_ratio', 'mean_accuracy']])
+    # train_y = train_query_attributes['sampling_budget']
+    # test_y = test_query_attributes['sampling_budget']
+
     # Create the MLP and CNN models
     mlp = models.create_mlp(train_query_x.shape[1], regress=False)
     cnn = models.create_cnn(num_rows, num_columns, 1, regress=False)
@@ -42,12 +44,12 @@ def main():
 
     # our final model will accept categorical/numerical data on the MLP
     # input and images on the CNN input, outputting a single value (the
-    # predicted price of the house)
+    # predicted budget)
     model = Model(inputs=[mlp.input, cnn.input], outputs=x)
 
     # compile the model using mean absolute percentage error as our loss,
     # implying that we seek to minimize the absolute percentage difference
-    # between our price *predictions* and the *actual prices*
+    # between our budget *predictions* and the *actual budgets*
     opt = Adam(lr=1e-3, decay=1e-3 / 200)
     model.compile(loss="mean_absolute_percentage_error", optimizer=opt)
 
@@ -59,11 +61,11 @@ def main():
         epochs=20, batch_size=8)
 
     # make predictions on the testing data
-    print("[INFO] predicting house prices...")
+    print("[INFO] predicting sampling budget...")
     preds = model.predict([test_query_x, test_histograms])
 
-    # compute the difference between the *predicted* house prices and the
-    # *actual* house prices, then compute the percentage difference and
+    # compute the difference between the *predicted* sampling budget ratio and the
+    # *actual* budget, then compute the percentage difference and
     # the absolute percentage difference
     diff = preds.flatten() - test_y
     percent_diff = (diff / test_y) * 100

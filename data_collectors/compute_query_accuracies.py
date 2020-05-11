@@ -2,10 +2,30 @@ import numpy as np
 import pandas as pd
 
 
+def load_query_parameters(dataset):
+    params_f = open('../data/query_logs/query_params/params_{}'.format(dataset))
+    lines = params_f.readlines()
+
+    ratios = [float(x) for x in lines[0].strip().split(',')]
+    budgets = [float(x) for x in lines[1].strip().split(',')]
+
+    ratios_str = ','.join('%.6f' % x for x in ratios)
+    budgets_str = ','.join('%.6f' % x for x in budgets)
+
+    ratios = [float(x) for x in ratios_str.strip().split(',')]
+    budgets = [float(x) for x in budgets_str.strip().split(',')]
+
+    return ratios, budgets
+
+
 def extract_acc(dataset, input_filename, output_filename):
     ratios = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1]
     budgets = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17,
                0.18, 0.19, 0.2]
+
+    # Load query parameters
+    # ratios, budgets = load_query_parameters(dataset)
+
     df = pd.read_csv(input_filename, header=None)
     df = df.iloc[:, 1:]
     data = pd.DataFrame.to_numpy(df)
@@ -51,9 +71,9 @@ def main():
     f = open('../data/all_datasets.txt')
     lines = f.readlines()
 
-    # for line in lines:
-    #     dataset = line.strip()
-    #     extract_acc(dataset, '../data/query_logs/results/result_{}'.format(dataset), '../data/query_logs/query_accuracies/acc_{}'.format(dataset))
+    for line in lines:
+        dataset = line.strip()
+        extract_acc(dataset, '../data/query_logs/results_05_09/result_{}'.format(dataset), '../data/query_logs/query_accuracies/acc_{}'.format(dataset))
 
     # Concatenate the result to 1 file
     filenames = ['../data/query_logs/query_accuracies/acc_{}'.format(line.strip()) for line in lines]

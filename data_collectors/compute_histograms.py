@@ -40,25 +40,51 @@ def extract_histogram(input_filename, output_filename, num_rows, num_columns):
 
 
 def extract_histograms():
-    histogram_dirs = ['16x16', '32x32', '64x64']
+    # histogram_dirs = ['16x16', '32x32', '64x64']
+    # f = open('../data/all_datasets.txt')
+    # lines = f.readlines()
+    # filenames = [line.strip() for line in lines]
 
-    f = open('../data/all_datasets.txt')
-    lines = f.readlines()
-    filenames = [line.strip() for line in lines]
+    histogram_dirs = ['64x64']
+    filenames = ['lakes_1', 'lakes_2', 'lakes_3', 'lakes_4']
 
     for histogram_dir in histogram_dirs:
         data = histogram_dir.split('x')
         num_rows = int(data[0])
         num_columns = int(data[1])
-        input_dir = '../data/histograms/{}'.format(histogram_dir)
-        output_dir = '../data/histogram_values/{}'.format(histogram_dir)
+        input_dir = '../data/real_datasets/lakes/histograms/{}'.format(histogram_dir)
+        output_dir = '../data/real_datasets/lakes/histogram_values/{}'.format(histogram_dir)
         for filename in filenames:
             extract_histogram('{}/{}'.format(input_dir, filename), '{}/{}'.format(output_dir, filename), num_rows, num_columns)
+
+
+def shrink_histograms(num_rows, num_columns):
+    input_dir = '../data/histogram_values/{}x{}'.format(num_rows, num_columns)
+    output_dir = '../data/histogram_values/{}x{}'.format(num_rows / 2, num_columns / 2)
+
+    f = open('../data/all_datasets.txt')
+    lines = f.readlines()
+    filenames = [line.strip() for line in lines]
+
+    # filenames = ['lakes_1', 'lakes_2', 'lakes_3', 'lakes_4']
+    for dataset in filenames:
+        hist_input_filename = '{}/{}'.format(input_dir, dataset)
+        hist_output_filename = '{}/{}'.format(output_dir, dataset)
+
+        hist_input = np.genfromtxt(hist_input_filename, delimiter=',')
+        hist_output = np.zeros((num_rows / 2, num_columns / 2))
+
+        for i in range(hist_output.shape[0]):
+            for j in range(hist_output.shape[1]):
+                hist_output[i, j] = hist_input[2*i, 2*j] + hist_input[2*i + 1, 2*j] + hist_input[2*i, 2*j + 1] + hist_input[2*i + 1, 2*j + 1]
+
+        np.savetxt(hist_output_filename, hist_output.astype(int), fmt='%i', delimiter=',')
 
 
 def main():
     # execute_queries()
     extract_histograms()
+    # shrink_histograms(4, 4)
 
 
 if __name__ == "__main__":

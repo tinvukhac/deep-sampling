@@ -9,10 +9,18 @@ def load_query_attributes(filename):
     return df
 
 
-def load_histograms(df, num_rows, num_columns):
+def load_query_attributes_from_multiple_files(filenames):
+    df = load_query_attributes(filenames[0])
+    for i in range(1, len(filenames)):
+        filename = filenames[i]
+        df = df.append(load_query_attributes(filename), ignore_index=True)
+    return df
+
+
+def load_histograms(df, histogram_dir):
     histograms = []
 
-    histogram_dir = 'data/histogram_values/{}x{}'.format(num_rows, num_columns)
+    # histogram_dir = 'data/histogram_values/{}x{}'.format(num_rows, num_columns)
 
     for filename in df['dataset_name']:
         hist = np.genfromtxt('{}/{}'.format(histogram_dir, filename), delimiter=',')
@@ -21,3 +29,13 @@ def load_histograms(df, num_rows, num_columns):
         histograms.append(hist)
 
     return np.array(histograms)
+
+
+def main():
+    print ('Dataset loaders')
+    df = load_query_attributes_from_multiple_files(['data/query_accuracies_uniform.csv', 'data/query_accuracies_diagonal.csv'])
+    print (df)
+
+
+if __name__ == '__main__':
+    main()

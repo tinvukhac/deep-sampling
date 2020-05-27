@@ -23,8 +23,10 @@ def extract_acc(dataset, input_filename, output_filename):
     # ratios = [0.0009, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009]
     # budgets = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17,
     #            0.18, 0.19, 0.2]
-    budgets = [0.00001, 0.000015, 0.00002, 0.00003, 0.00004, 0.00005, 0.00006, 0.00007, 0.00008, 0.00009, 0.0001,
-               0.0005, 0.001, 0.0015, 0.002, 0.0025, 0.003, 0.0035, 0.004, 0.0045, 0.005,
+    # budgets = [0.00001, 0.000015, 0.00002, 0.00003, 0.00004, 0.00005, 0.00006, 0.00007, 0.00008, 0.00009, 0.0001,
+    #            0.0005, 0.001, 0.0015, 0.002, 0.0025, 0.003, 0.0035, 0.004, 0.0045, 0.005,
+    #            0.0055, 0.006, 0.0065, 0.007, 0.0075, 0.008, 0.0085, 0.009, 0.0095]
+    budgets = [00.001, 0.0015, 0.002, 0.0025, 0.003, 0.0035, 0.004, 0.0045, 0.005,
                0.0055, 0.006, 0.0065, 0.007, 0.0075, 0.008, 0.0085, 0.009, 0.0095]
 
     # Load query parameters
@@ -33,7 +35,6 @@ def extract_acc(dataset, input_filename, output_filename):
     df = pd.read_csv(input_filename, header=None)
     df = df.iloc[:, 1:]
     data = pd.DataFrame.to_numpy(df)
-    print(data.shape)
 
     estimated_counts = {}
     for i in range(data.shape[0] - 10):
@@ -53,11 +54,9 @@ def extract_acc(dataset, input_filename, output_filename):
         for ratio in ratios:
             key = '{:.6f}-{:.6f}'.format(budget, ratio)
             # key = "%1.6f-%1.6f" % budget, ratio
-            print (key)
             actual_key = '{:.6f}-{:.6f}'.format(1.0, ratio)
             # full_budget = 1.0
             # actual_key = "%1.6f-%1.6f" % full_budget, ratio
-            print (actual_key)
             estimated_count = estimated_counts[key]
             actual_count = actual_counts[actual_key]
             diff = abs(estimated_count / budget - actual_count)

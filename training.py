@@ -10,17 +10,13 @@ import numpy as np
 import time
 
 
-def main():
-    print ("Train and test a prediction model for SE problem")
-
-    # Load dataset attributes
-    num_rows = 16
-    num_columns = 16
-    query_attributes = datasets.load_query_attributes('data/query_accuracies.csv')
+def train_and_test(query_attributes_files, num_rows, num_columns):
+    query_attributes = datasets.load_query_attributes_from_multiple_files(query_attributes_files)
     histogram_dir = 'data/histogram_values/{}x{}'.format(num_rows, num_columns)
     histograms = datasets.load_histograms(query_attributes, histogram_dir)
 
-    train_query_attributes, test_query_attributes, train_histograms, test_histograms = train_test_split(query_attributes, histograms, test_size=0.25, random_state=42)
+    train_query_attributes, test_query_attributes, train_histograms, test_histograms = train_test_split(
+        query_attributes, histograms, test_size=0.25, random_state=42)
 
     # pd.DataFrame.to_csv(train_query_attributes, 'data/train_query_attributes.csv')
     # pd.DataFrame.to_csv(test_query_attributes, 'data/test_query_attributes.csv')
@@ -35,15 +31,15 @@ def main():
     # pd.DataFrame.to_csv(df, 'data/acc_pred.csv')
     # return
 
-    train_query_x = pd.DataFrame.to_numpy(train_query_attributes[['sampling_budget', 'query_ratio']])
-    test_query_x = pd.DataFrame.to_numpy(test_query_attributes[['sampling_budget', 'query_ratio']])
-    train_y = train_query_attributes['mean_accuracy']
-    test_y = test_query_attributes['mean_accuracy']
+    # train_query_x = pd.DataFrame.to_numpy(train_query_attributes[['sampling_budget', 'query_ratio']])
+    # test_query_x = pd.DataFrame.to_numpy(test_query_attributes[['sampling_budget', 'query_ratio']])
+    # train_y = train_query_attributes['mean_accuracy']
+    # test_y = test_query_attributes['mean_accuracy']
 
-    # train_query_x = pd.DataFrame.to_numpy(train_query_attributes[['query_ratio', 'mean_accuracy']])
-    # test_query_x = pd.DataFrame.to_numpy(test_query_attributes[['query_ratio', 'mean_accuracy']])
-    # train_y = train_query_attributes['sampling_budget']
-    # test_y = test_query_attributes['sampling_budget']
+    train_query_x = pd.DataFrame.to_numpy(train_query_attributes[['query_ratio', 'mean_accuracy']])
+    test_query_x = pd.DataFrame.to_numpy(test_query_attributes[['query_ratio', 'mean_accuracy']])
+    train_y = train_query_attributes['sampling_budget']
+    test_y = test_query_attributes['sampling_budget']
 
     # Create the MLP and CNN models
     mlp = models.create_mlp(train_query_x.shape[1], regress=False)
@@ -68,7 +64,7 @@ def main():
     EPOCHS = 20
     LR = 1e-2
     # opt = Adam(lr=1e-4, decay=1e-4 / 200)
-    opt = Adam(lr=LR, decay=LR/EPOCHS)
+    opt = Adam(lr=LR, decay=LR / EPOCHS)
     model.compile(loss="mean_absolute_percentage_error", optimizer=opt)
 
     # train the model
@@ -77,9 +73,10 @@ def main():
     model.fit(
         [train_query_x, train_histograms], train_y,
         validation_data=([test_query_x, test_histograms], test_y),
-        epochs=EPOCHS, batch_size=128)
+        epochs=EPOCHS, batch_size=1024)
     end_time = time.time()
-    print("--- Trained in %s seconds ---" % (end_time - start_time))
+    duration = end_time - start_time
+    print("--- Trained in %s seconds ---" % duration)
 
     # make predictions on the testing data
     print("[INFO] predicting sampling budget ratio...")
@@ -96,22 +93,22 @@ def main():
 
     # compute the mean and standard deviation of the absolute percentage
     # difference
-    mean = np.mean(abs_percent_diff)
-    std = np.std(abs_percent_diff)
+    synthetic_mean = np.mean(abs_percent_diff)
+    synthetic_std = np.std(abs_percent_diff)
 
     print ("Synthetic dataset:")
-    print ('mean = {}, std = {}'.format(mean, std))
+    print ('mean = {}, std = {}'.format(synthetic_mean, synthetic_std))
 
     # Test on real dataset
     real_query_attributes = datasets.load_query_attributes('data/lakes_query_accuracies.csv')
     real_histogram_dir = 'data/real_datasets/lakes/histogram_values/{}x{}'.format(num_rows, num_columns)
     test_histograms = datasets.load_histograms(real_query_attributes, real_histogram_dir)
 
-    test_query_x = pd.DataFrame.to_numpy(real_query_attributes[['sampling_budget', 'query_ratio']])
-    test_y = real_query_attributes['mean_accuracy']
+    # test_query_x = pd.DataFrame.to_numpy(real_query_attributes[['sampling_budget', 'query_ratio']])
+    # test_y = real_query_attributes['mean_accuracy']
 
-    # test_query_x = pd.DataFrame.to_numpy(real_query_attributes[['query_ratio', 'mean_accuracy']])
-    # test_y = real_query_attributes['sampling_budget']
+    test_query_x = pd.DataFrame.to_numpy(real_query_attributes[['query_ratio', 'mean_accuracy']])
+    test_y = real_query_attributes['sampling_budget']
 
     preds = model.predict([test_query_x, test_histograms])
 
@@ -124,11 +121,43 @@ def main():
 
     # compute the mean and standard deviation of the absolute percentage
     # difference
-    mean = np.mean(abs_percent_diff)
-    std = np.std(abs_percent_diff)
+    real_mean = np.mean(abs_percent_diff)
+    real_std = np.std(abs_percent_diff)
 
     print ("Real dataset:")
-    print ('mean = {}, std = {}'.format(mean, std))
+    print ('mean = {}, std = {}'.format(real_mean, real_std))
+
+    return duration, synthetic_mean, synthetic_std, real_mean, real_std
+
+
+def main():
+    print ("Train and test a prediction model for SE problem")
+
+    # Load dataset attributes
+    output_f = open('data/output_sampling_ratio_prediction.csv', 'w')
+    num_rows = 16
+    num_columns = 16
+    query_attributes_files_list = [['data/query_accuracies_uniform.csv'],
+                                   ['data/query_accuracies_uniform.csv', 'data/query_accuracies_diagonal.csv'],
+                                   ['data/query_accuracies_uniform.csv', 'data/query_accuracies_gauss.csv'],
+                                   ['data/query_accuracies_uniform.csv', 'data/query_accuracies_parcel.csv'],
+                                   ['data/query_accuracies_uniform.csv', 'data/query_accuracies_combo.csv'],
+                                   ['data/query_accuracies_uniform.csv', 'data/query_accuracies_diagonal.csv',
+                                    'data/query_accuracies_gauss.csv'],
+                                   ['data/query_accuracies_uniform.csv', 'data/query_accuracies_diagonal.csv',
+                                    'data/query_accuracies_parcel.csv'],
+                                   ['data/query_accuracies_uniform.csv', 'data/query_accuracies_diagonal.csv',
+                                    'data/query_accuracies_combo.csv'],
+                                   ['data/query_accuracies_all.csv']]
+
+    for query_attributes_files in query_attributes_files_list:
+        duration, synthetic_mean, synthetic_std, real_mean, real_std = train_and_test(query_attributes_files, num_rows,
+                                                                                      num_columns)
+        output_f.writelines(
+            '{}\t{}\t{}\t{}\t{}\t{}\n'.format(','.join(query_attributes_files), duration, synthetic_mean, synthetic_std,
+                                              real_mean, real_std))
+
+    output_f.close()
 
 
 if __name__ == "__main__":

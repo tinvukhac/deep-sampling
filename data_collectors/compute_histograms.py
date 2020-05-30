@@ -83,8 +83,8 @@ def shrink_histograms(num_rows, num_columns):
 
 def main():
     # execute_queries()
-    extract_histograms()
-    # shrink_histograms(4, 4)
+    # extract_histograms()
+    shrink_histograms(2, 2)
 
 
 if __name__ == "__main__":

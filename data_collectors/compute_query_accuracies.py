@@ -23,11 +23,11 @@ def extract_acc(dataset, input_filename, output_filename):
     # ratios = [0.0009, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009]
     # budgets = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17,
     #            0.18, 0.19, 0.2]
-    # budgets = [0.00001, 0.000015, 0.00002, 0.00003, 0.00004, 0.00005, 0.00006, 0.00007, 0.00008, 0.00009, 0.0001,
-    #            0.0005, 0.001, 0.0015, 0.002, 0.0025, 0.003, 0.0035, 0.004, 0.0045, 0.005,
-    #            0.0055, 0.006, 0.0065, 0.007, 0.0075, 0.008, 0.0085, 0.009, 0.0095]
-    budgets = [00.001, 0.0015, 0.002, 0.0025, 0.003, 0.0035, 0.004, 0.0045, 0.005,
+    budgets = [0.00001, 0.000015, 0.00002, 0.00003, 0.00004, 0.00005, 0.00006, 0.00007, 0.00008, 0.00009, 0.0001,
+               0.0005, 0.001, 0.0015, 0.002, 0.0025, 0.003, 0.0035, 0.004, 0.0045, 0.005,
                0.0055, 0.006, 0.0065, 0.007, 0.0075, 0.008, 0.0085, 0.009, 0.0095]
+    # budgets = [0.001, 0.0015, 0.002, 0.0025, 0.003, 0.0035, 0.004, 0.0045, 0.005,
+    #            0.0055, 0.006, 0.0065, 0.007, 0.0075, 0.008, 0.0085, 0.009, 0.0095]
 
     # Load query parameters
     # ratios, budgets = load_query_parameters(dataset)
@@ -74,6 +74,13 @@ def extract_acc(dataset, input_filename, output_filename):
     output_f.close()
 
 
+def compute_accuracy_by_sampling_ratio(filename):
+    cols = ['dataset_name', 'sampling_budget', 'query_ratio', 'mean_accuracy']
+    df = pd.read_csv(filename, delimiter=',', header=None, names=cols)
+    df = df.groupby(['dataset_name', 'sampling_budget']).mean()
+    df.to_csv('../data/average_accuracy_by_sampling_ratio.csv')
+
+
 def main():
     print("Computing query accuracies")
     f = open('../data/all_datasets.txt')
@@ -85,7 +92,7 @@ def main():
 
     # Concatenate the result to 1 file
     filenames = ['../data/query_logs/query_accuracies_05_27/acc_{}'.format(line.strip()) for line in lines]
-    acc_filename = '../data/query_accuracies_05_27.csv'
+    acc_filename = '../data/query_accuracies_05_27_2.csv'
     acc_f = open(acc_filename, 'w')
     for filename in filenames:
         infile = open(filename)
@@ -110,6 +117,8 @@ def main():
     #         acc_f.write(line)
     #     infile.close()
     # acc_f.close()
+
+    compute_accuracy_by_sampling_ratio('../data/query_accuracies_05_27_2.csv')
 
 
 if __name__ == "__main__":

@@ -1,9 +1,31 @@
-data/query_accuracies_uniform.csv	0.000910997390747	44.6400663683	92.5668962274	129.967194825	64.5769622362
-data/query_accuracies_uniform.csv,data/query_accuracies_diagonal.csv	0.000952005386353	36.2015260773	65.3227362833	123.642191368	49.459560082
-data/query_accuracies_uniform.csv,data/query_accuracies_gauss.csv	0.00176382064819	123.979029395	78.7497347531	58.3488413069	45.2516068954
-data/query_accuracies_uniform.csv,data/query_accuracies_parcel.csv	0.000785112380981	55.5273512324	132.407166438	122.987806189	74.5286518094
-data/query_accuracies_uniform.csv,data/query_accuracies_combo.csv	0.000788927078247	75.9154419414	89.0861916131	99.2643942115	62.3615099864
-data/query_accuracies_uniform.csv,data/query_accuracies_diagonal.csv,data/query_accuracies_gauss.csv	0.00131702423096	95.1590485585	99.2685548837	80.7056107001	44.5436082022
-data/query_accuracies_uniform.csv,data/query_accuracies_diagonal.csv,data/query_accuracies_parcel.csv	0.00237488746643	46.6656638424	124.269773946	119.240523274	53.5940381047
-data/query_accuracies_uniform.csv,data/query_accuracies_diagonal.csv,data/query_accuracies_combo.csv	0.00204610824585	55.8706892185	89.8870284565	107.455913406	48.569513189
-data/query_accuracies_all.csv	0.00229978561401	91.8823065014	110.439356857	96.7351274383	59.674353331
+data/query_accuracies_uniform.csv	1	0.000948905944824	7.00577630176	15.0570740261	1.34005954164	1.72356983324
+data/query_accuracies_diagonal.csv	1	0.00171804428101	11.8242568196	30.6126862703	2.09977602718	3.12090683943
+data/query_accuracies_gauss.csv	1	0.00147604942322	16.5204541366	26.3886383053	0.612191627566	0.897876326772
+data/query_accuracies_parcel.csv	1	0.00115203857422	6.24974604017	10.5149262411	0.930425817559	0.972108721986
+data/query_accuracies_combo.csv	1	0.00126194953918	7.18357541609	11.5086141836	0.593951142736	0.418521840849
+data/query_accuracies_uniform.csv,data/query_accuracies_diagonal.csv	2	0.00186681747437	8.32434705076	19.0129658037	1.49654045342	1.93445073809
+data/query_accuracies_uniform.csv,data/query_accuracies_gauss.csv	2	0.00139188766479	7.39567005058	11.7537409077	0.530601654688	0.417534495795
+data/query_accuracies_uniform.csv,data/query_accuracies_parcel.csv	2	0.00133013725281	6.22232430217	11.0095408951	1.00660514759	1.09709748445
+data/query_accuracies_uniform.csv,data/query_accuracies_combo.csv	2	0.00122690200806	6.29676610372	10.0671250848	0.714018924326	0.512343319121
+data/query_accuracies_diagonal.csv,data/query_accuracies_gauss.csv	2	0.00183892250061	6.76283878074	10.952211426	0.525495235185	0.296236211231
+data/query_accuracies_diagonal.csv,data/query_accuracies_parcel.csv	2	0.00184106826782	6.93752302715	13.0182970952	1.06975455798	1.14919241105
+data/query_accuracies_diagonal.csv,data/query_accuracies_combo.csv	2	0.00170207023621	6.72212287718	11.2260185044	0.784210497384	0.627898117038
+data/query_accuracies_gauss.csv,data/query_accuracies_parcel.csv	2	0.00156903266907	7.73308242815	12.272337285	0.531450003417	0.453629810574
+data/query_accuracies_gauss.csv,data/query_accuracies_combo.csv	2	0.00159311294556	9.04068157277	14.5262604834	0.499976594568	0.472252628506
+data/query_accuracies_parcel.csv,data/query_accuracies_combo.csv	2	0.00145602226257	6.47525209272	10.2939632545	0.691247350014	0.510638612955
+data/query_accuracies_uniform.csv,data/query_accuracies_diagonal.csv,data/query_accuracies_gauss.csv	3	0.00231695175171	6.30606407721	10.1917459318	0.547784964373	0.26696124851
+data/query_accuracies_uniform.csv,data/query_accuracies_diagonal.csv,data/query_accuracies_parcel.csv	3	0.00175499916077	6.82042827594	13.0361862362	1.10893491599	1.23153435906
+data/query_accuracies_uniform.csv,data/query_accuracies_diagonal.csv,data/query_accuracies_combo.csv	3	0.00223302841187	6.58309606537	11.1981875612	0.865893507544	0.773567653906
+data/query_accuracies_uniform.csv,data/query_accuracies_gauss.csv,data/query_accuracies_parcel.csv	3	0.00144195556641	6.73439851764	10.7199966105	0.552752967718	0.372325632487
+data/query_accuracies_uniform.csv,data/query_accuracies_gauss.csv,data/query_accuracies_combo.csv	3	0.00182008743286	7.22443599907	11.5513094622	0.533472810512	0.374606491407
+data/query_accuracies_uniform.csv,data/query_accuracies_parcel.csv,data/query_accuracies_combo.csv	3	0.00192999839783	6.23801898838	10.0179755186	0.778625789886	0.640389788886
+data/query_accuracies_diagonal.csv,data/query_accuracies_gauss.csv,data/query_accuracies_parcel.csv	3	0.00222182273865	6.42924082441	10.3630662186	0.544990056256	0.285589505504
+data/query_accuracies_diagonal.csv,data/query_accuracies_gauss.csv,data/query_accuracies_combo.csv	3	0.00210905075073	6.7818512231	10.9847217939	0.52781710988	0.283959135116
+data/query_accuracies_diagonal.csv,data/query_accuracies_parcel.csv,data/query_accuracies_combo.csv	3	0.00280785560608	6.38517529571	10.4602294294	0.777870765463	0.620629318185
+data/query_accuracies_gauss.csv,data/query_accuracies_parcel.csv,data/query_accuracies_combo.csv	3	0.00193190574646	7.44270742822	11.8672939561	0.535850750896	0.411342088535
+data/query_accuracies_uniform.csv,data/query_accuracies_diagonal.csv,data/query_accuracies_gauss.csv,data/query_accuracies_parcel.csv	4	0.00229215621948	6.21065872288	9.98537999329	0.565808327361	0.295753671395
+data/query_accuracies_uniform.csv,data/query_accuracies_diagonal.csv,data/query_accuracies_gauss.csv,data/query_accuracies_combo.csv	4	0.0014181137085	6.45587943407	10.4261608144	0.54757919499	0.278542074188
+data/query_accuracies_uniform.csv,data/query_accuracies_diagonal.csv,data/query_accuracies_parcel.csv,data/query_accuracies_combo.csv	4	0.00248908996582	6.38334101598	10.6096126934	0.833432775956	0.724614041955
+data/query_accuracies_uniform.csv,data/query_accuracies_gauss.csv,data/query_accuracies_parcel.csv,data/query_accuracies_combo.csv	4	0.00212907791138	6.70197683621	10.6959042876	0.55652886642	0.363881245223
+data/query_accuracies_diagonal.csv,data/query_accuracies_gauss.csv,data/query_accuracies_parcel.csv,data/query_accuracies_combo.csv	4	0.00256204605103	6.55905812059	10.5671388468	0.546399964451	0.296386457382
+data/query_accuracies_uniform.csv,data/query_accuracies_diagonal.csv,data/query_accuracies_gauss.csv,data/query_accuracies_parcel.csv,data/query_accuracies_combo.csv	5	0.00129508972168	6.30630575274	10.1432618134	0.565356595057	0.301442497201
